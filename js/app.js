@@ -29,7 +29,12 @@ function pegarLocalizacao(endereco, cidade) {
 
 function buscarEstacoes() {
   let todasEstacoes = [];
-  // Lógica da Requisição Json
+  let response = await fetch('http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/estacoesBikeRio');
+  if(response.ok){
+    let todasEstacoes = await response.json();
+  }else{
+    alert("HTTP-Error: " + response.status)
+  }
   return todasEstacoes;
 }
 
