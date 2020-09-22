@@ -1,0 +1,39 @@
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Desafio 2</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="topo">
+        <div class="titulo">Qual Estação de Bike mais perto?</div>
+      </div>
+      <div class="bottom">
+        <div class="form">
+          <input
+            type="text"
+            name="endereco"
+            id="endereco"
+            placeholder="Endereço, nº"
+          />
+          <input type="text" name="cidade" id="cidade" placeholder="Cidade" />
+          <button type="submit" class="botao-buscar" onclick="formSubmit()">
+            <span class="material-icons">search</span> Buscar
+          </button>
+        </div>
+        <div class="mapa"></div>
+      </div>
+    </div>
+    <script src="js/app.js"></script>
+  </body>
+</html>
