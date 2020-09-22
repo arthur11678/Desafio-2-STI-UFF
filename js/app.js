@@ -2,33 +2,34 @@ function formSubmit() {
   // Pega os dados do formulário
   let endereco = document.getElementById("endereco").value;
   let cidade = document.getElementById("cidade").value;
-
-  // console.log(endereco, cidade);
+  let mapa = document.getElementById("mapa");
 
   // Pega a Latitude e Longitude
   let localizacao = [];
-  pegarLocalizacao(endereco, cidade).then((data) => {
-    localizacao = data;
-    console.log(localizacao);
-  });
-
-  // Pega Lista de todas as Estações
-  let todasEstacoes = [];
-  buscarEstacoes().then((data) => {
-    todasEstacoes = data;
-    console.log(todasEstacoes);
-  });
-  // .then(() => {});
-
-  // Pega a Localização da Estação mais perto do endereço
-  let estacaoMaisPerto = [];
-  estacaoMaisPerto = calcularEstacaoMaisPerto(
-    todasEstacoes,
-    localizacao[0],
-    localizacao[1]
-  );
-
-  // console.log(estacaoMaisPerto);
+  pegarLocalizacao(endereco, cidade)
+    .then((data) => {
+      localizacao = data;
+    })
+    .then(() => {
+      let todasEstacoes = [];
+      buscarEstacoes()
+        .then((data) => {
+          todasEstacoes = data;
+        })
+        .then(() => {
+          let estacaoMaisPerto = [];
+          calcularEstacaoMaisPerto(
+            todasEstacoes,
+            localizacao[0],
+            localizacao[1]
+          ).then((data) => {
+            estacaoMaisPerto = data;
+            // Adicionar Google Maps Aqui!
+            mapa.innerHTML = `<p> Latitude: ${estacaoMaisPerto[5]}</p>`;
+            mapa.innerHTML += `<p> Longitude: ${estacaoMaisPerto[6]}</p>`;
+          });
+        });
+    });
 }
 
 async function pegarLocalizacao(endereco, cidade) {
@@ -60,18 +61,36 @@ async function buscarEstacoes() {
 }
 
 function calcularDistacia(latitude_1, longitude_1, latitude_2, longitude_2) {
-  let distancia = 0;
-  distancia = Math.hypot(latitude_2 - latitude_1, longitude_2 - longitude_1);
+  let distancia = 0.0;
+  distancia = parseFloat(
+    Math.hypot(
+      parseFloat(latitude_2) - parseFloat(latitude_1),
+      parseFloat(longitude_2) - parseFloat(longitude_1)
+    )
+  );
   return distancia;
 }
 
-function calcularEstacaoMaisPerto(todasEstacoes, latitude, longitude) {
+async function calcularEstacaoMaisPerto(todasEstacoes, latitude, longitude) {
   let estacaoMaisPerto = [];
-  estacaoMaisPerto = calcularDistacia(
-    todasEstacoes[5],
-    todasEstacoes[6],
-    latitude,
-    longitude
-  );
+  let menorDistancia = 0.0;
+  let estacoes = [];
+  for (estacoes of todasEstacoes) {
+    if (estacoes == todasEstacoes[0]) {
+      estacaoMaisPerto = estacoes;
+      menorDistancia = calcularDistacia(
+        latitude,
+        longitude,
+        estacoes[5],
+        estacoes[6]
+      );
+    } else {
+      let aux = calcularDistacia(latitude, longitude, estacoes[5], estacoes[6]);
+      if (aux < menorDistancia) {
+        menorDistancia = aux;
+        estacaoMaisPerto = estacoes;
+      }
+    }
+  }
   return estacaoMaisPerto;
 }

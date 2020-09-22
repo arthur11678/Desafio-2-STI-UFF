@@ -109,4 +109,8 @@ form {
   margin: 2vh auto;
   background-color: #fff;
   border: 2px solid #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
