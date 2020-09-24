@@ -102,6 +102,6 @@ async function calcularEstacaoMaisPerto(todasEstacoes, latitude, longitude) {
         estacaoMaisPerto = estacoes;
       }
     }
-  }
+  }     //fghfghfghfgjghjghkjkhjkhjlhjkl
   return estacaoMaisPerto;
 }
