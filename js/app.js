@@ -2,7 +2,12 @@ function formSubmit() {
   // Pega os dados do formulário
   let endereco = document.getElementById("endereco").value;
   let cidade = document.getElementById("cidade").value;
-  let mapa = document.getElementById("mapa");
+  let mapa = Microsoft.Maps.Map(document.getElementById("mapa"),{
+    center : new Microsoft.Maps.Location(-22.952696, -43.202080),
+    zoom : 12
+  });
+
+ 
 
   // Pega a Latitude e Longitude
   let localizacao = [];
@@ -24,9 +29,15 @@ function formSubmit() {
             localizacao[1]
           ).then((data) => {
             estacaoMaisPerto = data;
-            // Adicionar Google Maps Aqui!
-            mapa.innerHTML = `<p> Latitude: ${estacaoMaisPerto[5]}</p>`;
-            mapa.innerHTML += `<p> Longitude: ${estacaoMaisPerto[6]}</p>`;
+            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function(){
+              let directionsManager = new Microsoft.Maps.Directions.directionsManager(mapa);
+              directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
+              var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: 'Minha Localização', location: new Microsoft.Maps.Location(parseFloat(localizacao[0]), parseFloat[1]) });
+              var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: 'Localização da estação', location: new Microsoft.Maps.Location(estacaoMaisPerto[5], estacaoMaisPerto[6]) });
+              directionsManager.addWaypoint(waypoint1);
+              directionsManager.addWaypoint(waypoint2);
+              directionsManager.calculateDirections();
+            });
           });
         });
     });
