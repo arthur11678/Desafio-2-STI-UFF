@@ -1,13 +1,13 @@
+window.onload = function () {
+  let mapa = Microsoft.Maps.Map(document.getElementById("mapa"), {
+    center: new Microsoft.Maps.Location(-22.952696, -43.20208),
+    zoom: 13,
+  });
+};
 function formSubmit() {
   // Pega os dados do formulário
   let endereco = document.getElementById("endereco").value;
   let cidade = document.getElementById("cidade").value;
-  let mapa = Microsoft.Maps.Map(document.getElementById("mapa"),{
-    center : new Microsoft.Maps.Location(-22.952696, -43.202080),
-    zoom : 12
-  });
-
- 
 
   // Pega a Latitude e Longitude
   let localizacao = [];
@@ -29,13 +29,38 @@ function formSubmit() {
             localizacao[1]
           ).then((data) => {
             estacaoMaisPerto = data;
-            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function(){
-              let directionsManager = new Microsoft.Maps.Directions.directionsManager(mapa);
-              directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
-              var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: 'Minha Localização', location: new Microsoft.Maps.Location(parseFloat(localizacao[0]), parseFloat[1]) });
-              var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: 'Localização da estação', location: new Microsoft.Maps.Location(estacaoMaisPerto[5], estacaoMaisPerto[6]) });
-              directionsManager.addWaypoint(waypoint1);
-              directionsManager.addWaypoint(waypoint2);
+            var mapa = new Microsoft.Maps.Map(document.getElementById("mapa"), {
+              center: new Microsoft.Maps.Location(-22.952696, -43.20208),
+              zoom: 12,
+            });
+            Microsoft.Maps.loadModule("Microsoft.Maps.Directions", function () {
+              var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(
+                mapa
+              );
+              // Set Route Mode to walking
+              directionsManager.setRequestOptions({
+                routeMode: Microsoft.Maps.Directions.RouteMode.walking
+              },{
+                distanceUnity: Microsoft.Maps.Directions.DistanceUnit.km
+              });
+              var usuario_loc = new Microsoft.Maps.Directions.Waypoint({
+                location: new Microsoft.Maps.Location(
+                  parseFloat(localizacao[0]),
+                  parseFloat(localizacao[1])
+                ),
+              });
+              var estacao_loc = new Microsoft.Maps.Directions.Waypoint({
+                location: new Microsoft.Maps.Location(
+                  parseFloat(estacaoMaisPerto[5]),
+                  parseFloat(estacaoMaisPerto[6])
+                ),
+              });
+              directionsManager.addWaypoint(usuario_loc);
+              directionsManager.addWaypoint(estacao_loc);
+              // Set the element in which the itinerary will be rendered
+              directionsManager.setRenderOptions({
+                itineraryContainer: document.getElementById("itinerario"),
+              });
               directionsManager.calculateDirections();
             });
           });
@@ -102,6 +127,6 @@ async function calcularEstacaoMaisPerto(todasEstacoes, latitude, longitude) {
         estacaoMaisPerto = estacoes;
       }
     }
-  }     //fghfghfghfgjghjghkjkhjkhjlhjkl
+  }
   return estacaoMaisPerto;
 }
