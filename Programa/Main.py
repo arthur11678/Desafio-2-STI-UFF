@@ -18,11 +18,11 @@ def pegarEstacoes():                                                            
     response = response.json()
     return response['DATA']
 
-def Dist(lat1, long1, lat2, long2):                                             #D
+def Dist(lat1, long1, lat2, long2):                                             #Define uma função para calcular a distancia entre o usuario e uma dada estação
     distAB = math.dist([lat1, long1], [lat2, long2])
     return distAB
 
-def ordenarEstacoes(lat, log, estacoesBikeRio):
+def ordenarEstacoes(lat, log, estacoesBikeRio):                                  #Define uma função que ordena as estações em relação a distancia ate o usuario de maneira decrescente. 
     distancia = 0.0
     ordenar = list()
     for estacoes in estacoesBikeRio:
@@ -32,11 +32,11 @@ def ordenarEstacoes(lat, log, estacoesBikeRio):
 
 
 
-rua, numero, cidade = input("Digite sua localizacao no formato : 'Rua, numero, cidade'").split(',')
-lat, lon = pegarLocalizacao(rua, numero, cidade)
-estacoesBikeRio = pegarEstacoes()
-estacoes_ordenadas = ordenarEstacoes(lat, lon, estacoesBikeRio)
+rua, numero, cidade = input("Digite sua localizacao no formato : 'Rua, numero, cidade'").split(',') #Recebe o endereço do usuario  
+lat, lon = pegarLocalizacao(rua, numero, cidade)                            #Passa o endereço para a função e recebe a latitude e longitude do usuario
+estacoesBikeRio = pegarEstacoes()                                           #Recebe todas as estações do BikeRio
+estacoes_ordenadas = ordenarEstacoes(lat, lon, estacoesBikeRio)             #Ordena as estações em ordem decrescente
 print("Estaçoes ordenadas em ordem decrescente de distancia")
-for linha in estacoes_ordenadas:
+for linha in estacoes_ordenadas:                                            #Printa as estações
     print(linha)
 
