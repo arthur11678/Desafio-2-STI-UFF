@@ -1,6 +1,10 @@
 import requests 
 import json
-import math 
+import math
+import operator
+from Estações import Estacoes
+
+
 
 
 def pegarLocalizacao(rua, numero, cidade):
@@ -18,25 +22,21 @@ def Dist(lat1, long1, lat2, long2):
     distAB = math.dist([lat1, long1], [lat2, long2])
     return distAB
 
-def checarEstacaoProxima(lat, log, estacoesBikeRio):
-    estacaoMaisProxima = list()
-    menorDistancia = 0.0
+def ordenarEstacoes(lat, log, estacoesBikeRio):
+    distancia = 0.0
+    ordenar = list()
     for estacoes in estacoesBikeRio:
-        if estacoes == estacoesBikeRio[0]:
-            menorDistancia = Dist(lat, log, float(estacoes[5]), float(estacoes[6]))
-            estacaoMaisProxima = estacoes
-        else:
-            aux = Dist(lat, log, float(estacoes[-2]), float(estacoes[-1]))
-            if aux < menorDistancia:
-                menorDistancia = aux
-                estacaoMaisProxima = estacoes
-    return estacaoMaisProxima, menorDistancia
+        distancia = float(Dist(lat, log, float(estacoes[5]), float(estacoes[6])))
+        ordenar.append(Estacoes(estacoes[0], estacoes[1], estacoes[2], estacoes[3], estacoes[4], estacoes[5], estacoes[6], (distancia*100)))
+    return sorted(ordenar, key=operator.attrgetter('distancia'), reverse= True)
 
 
 
 rua, numero, cidade = input("Digite sua localizacao no formato : 'Rua, numero, cidade'").split(',')
 lat, lon = pegarLocalizacao(rua, numero, cidade)
-print(lat, lon)
 estacoesBikeRio = pegarEstacoes()
-print(checarEstacaoProxima(lat, lon, estacoesBikeRio))
+estacoes_ordenadas = ordenarEstacoes(lat, lon, estacoesBikeRio)
+print("Estaçoes ordenadas em ordem decrescente de distancia")
+for linha in estacoes_ordenadas:
+    print(linha)
 
