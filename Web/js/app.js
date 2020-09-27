@@ -37,6 +37,11 @@ function formSubmit() {
               var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(
                 mapa
               );
+              for(pin of todasEstacoes){
+                var loc = {latitude: parseFloat(pin[5]), longitude: parseFloat(pin[6])};
+                var pushpin = new Microsoft.Maps.Pushpin(loc, null);
+                mapa.entities.push(pushpin);
+              }
               // Set Route Mode to walking
               directionsManager.setRequestOptions({
                 routeMode: Microsoft.Maps.Directions.RouteMode.walking
