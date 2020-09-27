@@ -2,23 +2,23 @@ import requests
 import json
 import math
 import operator
-from Estações import Estacoes
+from Estações import Estacoes               #Importa a classe Estaçoes
 
 
 
 
-def pegarLocalizacao(rua, numero, cidade):
+def pegarLocalizacao(rua, numero, cidade):                                      #Define uma função que faz uma requisição a api OSM, transforma a resposta para o formato json e retorna somente a latitude e longitude do endereço inserido.
     requisicao = 'https://nominatim.openstreetmap.org/search?street='+rua+','+numero+'&city='+cidade+'&county=Brasil&format=json'
     response = requests.get(requisicao)
     response = response.json()
     return float(response[0]['lat']), float(response[0]['lon'])
 
-def pegarEstacoes():
+def pegarEstacoes():                                                            #Define uma função que faz uma requisição a api do BikeRio, trasnforma a resposta para o formato json e retorna somenta a parte de dados do json. 
     response = requests.get('http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/estacoesBikeRio')
     response = response.json()
     return response['DATA']
 
-def Dist(lat1, long1, lat2, long2):
+def Dist(lat1, long1, lat2, long2):                                             #D
     distAB = math.dist([lat1, long1], [lat2, long2])
     return distAB
 
